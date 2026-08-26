@@ -143,8 +143,9 @@ def check_vk_wall(group_id, group_name):
 
     if last_saved_id == 0:
         if posts:
-            save_last_id(group_id, posts[0]["id"])
-            print(f"Первый запуск для {group_name}. Запомнили последний пост #{posts[0]['id']}, ничего не отправляем.")
+            max_id = max(post["id"] for post in posts if "id" in post)
+            save_last_id(group_id, max_id)
+            print(f"Первый запуск для {group_name}. Запомнили максимальный ID #{max_id}, ничего не отправляем.")
         return
         
     new_posts = []
