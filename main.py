@@ -24,7 +24,7 @@ TG_CHANNEL = os.getenv("TG_CHANNEL")
 VK_TOKEN = os.getenv("VK_TOKEN")
 
 VK_GROUPS = {
-    226921338: "Второй курс ИОТ, УрФУ",
+    226921338: "Третий курс ИОТ, УрФУ",
     188533997: "Проектный практикум ИРИТ-РТФ",
     230634931: "Поселение ИРИТ-РТФ УрФУ",
 }
@@ -124,7 +124,7 @@ def check_vk_wall(group_id, group_name):
     vk_url = "https://api.vk.com/method/wall.get"
     params = {
         "owner_id": owner_id,
-        "count": 3,  
+        "count": 0,  
         "access_token": VK_TOKEN,
         "v": "5.131",
     }
