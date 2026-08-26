@@ -124,7 +124,7 @@ def check_vk_wall(group_id, group_name):
     vk_url = "https://api.vk.com/method/wall.get"
     params = {
         "owner_id": owner_id,
-        "count": 0,  
+        "count": 5,  
         "access_token": VK_TOKEN,
         "v": "5.131",
     }
@@ -140,6 +140,13 @@ def check_vk_wall(group_id, group_name):
         return
 
     last_saved_id = get_last_saved_id(group_id)
+
+    if last_saved_id == 0:
+        if posts:
+            save_last_id(group_id, posts[0]["id"])
+            print(f"Первый запуск для {group_name}. Запомнили последний пост #{posts[0]['id']}, ничего не отправляем.")
+        return
+        
     new_posts = []
     for post in posts:
         if "id" not in post:
@@ -189,7 +196,7 @@ def main():
     server_thread = Thread(target=run_web_server)
     server_thread.daemon = True
     server_thread.start()
-    set_initial_avatar()
+    #set_initial_avatar()
     while True:
         for group_id, group_name in VK_GROUPS.items():
             try:
