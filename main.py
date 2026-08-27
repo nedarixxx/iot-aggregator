@@ -140,7 +140,6 @@ def check_vk_wall(group_id, group_name):
         return
 
     last_saved_id = get_last_saved_id(group_id)
-
     if last_saved_id == 0:
         if posts:
             max_id = max(post["id"] for post in posts if "id" in post)
@@ -156,12 +155,11 @@ def check_vk_wall(group_id, group_name):
             continue
         if post["id"] > last_saved_id:
             new_posts.append(post)
-
     if not new_posts:
         print(f"Новых постов в группе {group_name} нет.")
         return
 
-    new_posts.sort(key=lambda x: x["date"])
+    new_posts.sort(key=lambda x: x["id"])    
     for post in new_posts:
         vk_text = post.get("text", "")
         photo_url = None
@@ -183,9 +181,8 @@ def check_vk_wall(group_id, group_name):
         print(f"Отправляю пост #{post['id']} из группы {group_name}...")
         success = send_to_telegram(full_text, source_url, photo_url)
         if success:
-            if post["id"] > last_saved_id:
-                last_saved_id = post["id"]
-                save_last_id(group_id, last_saved_id)
+            last_saved_id = max(last_saved_id, post["id"])
+            save_last_id(group_id, last_saved_id)
             time.sleep(3)
         else:
             print(f"Не удалось отправить пост #{post['id']}.")
